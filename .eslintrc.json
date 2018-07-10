@@ -6,7 +6,8 @@
     "stream$Readable": true,
     "tty$ReadStream": true,
     "stream$Writable": true,
-    "tty$WriteStream": true
+    "tty$WriteStream": true,
+    "$ReadOnlyArray": true
   },
   "rules": {
     "strict": 0,

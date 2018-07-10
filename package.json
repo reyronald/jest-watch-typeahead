@@ -18,13 +18,14 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
-    "watch": "babel src -w --ignore **/*.test.js,integration -d build",
+    "watch": "babel src -s -w --ignore **/*.test.js,integration -d build",
     "build": "babel src --ignore **/*.test.js,integration -d build",
     "prepublish": "yarn build",
-    "format": "prettier --single-quote --trailing-comma all --write \"!(build)/**/*.js\""
+    "format": "prettier --single-quote --trailing-comma all --write \"!(build)/**/*.js\" \"src/**/*.js\""
   },
   "dependencies": {
     "chalk": "^2.4.1",
+    "fuzzaldrin-plus": "^0.6.0",
     "jest-watcher": "^23.1.0",
     "slash": "^1.0.0",
     "string-length": "^2.0.0",

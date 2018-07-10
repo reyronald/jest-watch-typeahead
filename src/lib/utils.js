@@ -157,3 +157,62 @@ export const formatTestNameByPattern = (
 
   return `${chalk.dim(slicedTestName)}${chalk.reset(DOTS)}`;
 };
+
+function splitMatches(
+  text: string,
+  matches: number[],
+): Array<{|
+  str: string,
+  isMatch: boolean,
+|}> {
+  const result = [];
+  for (let i = 0; i < text.length; i += 1) {
+    const isMatch = i === matches[0];
+    if (isMatch) {
+      matches.shift();
+    }
+
+    const lastIndex = result.length - 1;
+    if (lastIndex !== -1 && result[lastIndex].isMatch === isMatch) {
+      result[lastIndex].str += text[i];
+    } else {
+      result.push({ str: text[i], isMatch });
+    }
+  }
+  return result;
+}
+
+export function highlightFuzzy(
+  rawPath: string,
+  filePath: string,
+  pattern: string,
+  rootDir: string,
+  matches: number[],
+): string {
+  const trim = '...';
+  const relativePathHead = './';
+  // eslint-disable-next-line no-unused-vars
+  const rawPathStripped = stripAnsi(rawPath);
+  const filePathStripped = stripAnsi(filePath);
+
+  let offset;
+  // eslint-disable-next-line no-unused-vars
+  let trimLength;
+  if (filePath.startsWith(trim)) {
+    offset = rawPath.length - filePath.length;
+    trimLength = trim.length;
+  } else if (filePath.startsWith(relativePathHead)) {
+    offset = rawPath.length - filePath.length;
+    trimLength = relativePathHead.length;
+  } else {
+    offset = rootDir.length + path.sep.length;
+    trimLength = 0;
+  }
+
+  const offsetMatches = matches.map(m => m - offset);
+  const splitMatchesResult = splitMatches(filePathStripped, offsetMatches);
+  const result = splitMatchesResult.reduce((prev, curr) => {
+    return prev + (curr.isMatch ? chalk.reset(curr.str) : chalk.gray(curr.str));
+  }, '');
+  return result;
+}

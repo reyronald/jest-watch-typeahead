@@ -8,5 +8,6 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true
-  }
+  },
+  "javascript.validate.enable": false
 }
